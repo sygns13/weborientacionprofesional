@@ -1,0 +1,11 @@
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+    /* padding: 2px; */
+    padding-left: 4px;
+    padding-bottom: 0px;
+    padding-top: 2px;
+    /* margin-bottom: -1px; */
+    line-height: 1.22;
+    vertical-align: inherit;
+    border-top: 1px solid #ddd;
+    font-size: 14px;
+}
