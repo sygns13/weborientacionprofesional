@@ -125,11 +125,6 @@ return [
     'submit'                  => 'ENVIAR',
     'email'                   => 'Email',
     'password'                => 'Senha',
-    'retypepassword'          => 'Repetir senha',
+    'retrypepassword'         => 'Repetir senha',
     'fullname'                => 'Nome completo',
-    'registererror'           => 'Error registering!',
-    'loginerror'              => 'Error loging!',
-    'loggedin'                => 'Login correcte!',
-    'entering'                => 'Entrant...',
-    'registered'              => 'User Registered!',
 ];

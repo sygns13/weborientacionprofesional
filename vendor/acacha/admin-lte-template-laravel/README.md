@@ -7,10 +7,10 @@ See demo here:
 
 If you are looking for the Laravel 4 version, use 0.1.5 version/tag and see [OLD-README.md](OLD-README.md)
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/acacha/admin-lte-template-laravel.svg?style=flat-square)](https://packagist.org/packages/acacha/admin-lte-template-laravel)
 [![Total Downloads](https://poser.pugx.org/acacha/admin-lte-template-laravel/downloads.png)](https://packagist.org/packages/acacha/admin-lte-template-laravel)
 [![Monthly Downloads](https://poser.pugx.org/acacha/admin-lte-template-laravel/d/monthly)](https://packagist.org/packages/acacha/admin-lte-template-laravel)
 [![Daily Downloads](https://poser.pugx.org/acacha/admin-lte-template-laravel/d/daily)](https://packagist.org/packages/acacha/admin-lte-template-laravel)
+[![Latest Stable Version](https://poser.pugx.org/acacha/admin-lte-template-laravel/v/stable.png)](https://packagist.org/packages/acacha/admin-lte-template-laravel)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/acacha/adminlte-laravel/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/acacha/adminlte-laravel/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/acacha/adminlte-laravel/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/acacha/adminlte-laravel/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/acacha/adminlte-laravel/badges/build.png?b=master)](https://scrutinizer-ci.com/g/acacha/adminlte-laravel/build-status/master)
@@ -62,8 +62,7 @@ This packages use (no need to install):
 * [acacha/helpers](https://github.com/acacha/helpers) : Extra helpers for Laravel provided by acacha.
 * [creativeorange/gravatar](https://github.com/creativeorange/gravatar): Gravatar support for user's profile images. This could be optional through configuration.
 * [league/flysystem](https://github.com/thephpleague/flysystem) : Filesystem support.
-* [acacha/forms](https://github.com/acacha/forms) : Javascript Form objects implementation.
-* [acacha/llum](https://github.com/acacha/llum). Easy Laravel packages installation (and other tasks). Used to modify config/app.php file without using stubs (so you changes to this file would be respected)
+* [Acacha/llum](https://github.com/acacha/llum). Easy Laravel packages installation (and other tasks). Used to modify config/app.php file without using stubs (so you changes to this file would be respected)
 * Acacha llum requires GNU sed. on MAC OS install GNU sed with:
 
 ```bash
@@ -83,14 +82,6 @@ export PATH=${PATH}:~/.composer/vendor/bin
 ```
 
 to your ~/.bashrc file
-
-Note: in some systems the path coul be diferent for example:
-
-```bash
-export PATH=${PATH}:~/.config/composer/vendor/bin
-```
-
-Please be sure to check you environment.
 
 ## Optional requirements
 * [Laravel menu](https://github.com/spatie/laravel-menu): only used with command adminlte:menu that replaces default adminlte menu with a menu with spatie/laravel-menu support.
@@ -181,7 +172,7 @@ By default Laravel 5.1 does not include default auth routes. Versions > 1.0 < 2.
 
 See  [old README file](OLD-README.md) file for notes of which routes are registered.
 
-### Installation
+###Installation
 
 First install Laravel (http://laravel.com/docs/5.0/installation) and then Create a new Laravel project:
 
@@ -218,7 +209,7 @@ Note: use the following for Laravel <5.1 versions:
  'Acacha\AdminLTETemplateLaravel\app\Providers\AdminLTETemplateServiceProvider',
 </pre>
 
-## Laravel Routes
+##Laravel Routes
 
 This package installs Laravel routes that you will not find them at routes.php file. The routes installed by package would be find at file:
 
@@ -259,7 +250,7 @@ custom commands will not be available).
 
 See issue https://github.com/acacha/adminlte-laravel/issues/69 for more info
 
-## First steps, database creation, migrations and login
+##First steps, database creation, migrations and login
 
 Once package installed you have to follow the usual steps of any laravel project to Login to the admin interface:
 
@@ -268,7 +259,7 @@ Once package installed you have to follow the usual steps of any laravel project
 - Run migrations with command $ php artisan migrate
 - Registera a first user and Login with it
 
-## AdminLTE
+##AdminLTE
 
 AdminLTE is a Free Premium Admin control Panel Theme That Is Based On Bootstrap 3.x created by Abdullah Almsaeed. See:
 
@@ -485,26 +476,13 @@ http://acacha.org/mediawiki/AdminLTE#adminlte-laravel
 
 ## Tests
 
-There are two kind of tests Feature/Unit tests and Browser tests. To execute Feature/Unit tests execute:
+Execute:
 
 ```
-./vendor/bin/phpunit
+phpunit
 ```
 
-In a new created laravel project with acacha-admintle.laravel installed to test that package is installed correctly. You can also execute Browser tests with Laravel Dusk:
-
-```
-php artisan dusk:install
-touch database/testing.database.sqlite
-php artisan serve --env=dusk.local &
-php artisan dusk
-```
-
-You can also test this package in a sandbox without need to install. Run script:
-
-```bash
-./test.sh
-```
+In new created laravel project with acacha-admintle.laravel installed to test package is installed correctly.
 
 ## Localization
 
