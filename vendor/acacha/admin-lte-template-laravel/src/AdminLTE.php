@@ -128,6 +128,8 @@ class AdminLTE
         return [
             ADMINLTETEMPLATE_PATH.'/resources/views/auth'              =>
                 resource_path('views/vendor/adminlte/auth'),
+            ADMINLTETEMPLATE_PATH.'/resources/views/auth/emails'       =>
+                resource_path('views/vendor/adminlte/auth/emails'),
             ADMINLTETEMPLATE_PATH.'/resources/views/errors'            =>
                 resource_path('views/vendor/adminlte/errors'),
             ADMINLTETEMPLATE_PATH.'/resources/views/layouts'           =>
@@ -279,44 +281,6 @@ class AdminLTE
     {
         return [
             ADMINLTETEMPLATE_PATH.'/src/stubs/User.php.stub' => app_path('User.php'),
-        ];
-    }
-
-    /**
-     * AppServiceProvider class copy path.
-     *
-     * @return array
-     */
-    public function appServiceProviderClass()
-    {
-        return [
-            ADMINLTETEMPLATE_PATH.'/src/stubs/AppServiceProvider.php.stub' =>
-                app_path('Providers/AppServiceProvider.php'),
-        ];
-    }
-
-    /**
-     * Dusk environment files copy path.
-     *
-     * @return array
-     */
-    public function duskEnvironment()
-    {
-        return [
-            ADMINLTETEMPLATE_PATH.'/.env.dusk.local'        => base_path('.env.dusk.local'),
-            ADMINLTETEMPLATE_PATH.'/.env.dusk.testing'      => base_path('.env.dusk.testing'),
-        ];
-    }
-
-    /**
-     * Database config copy path.
-     *
-     * @return array
-     */
-    public function databaseConfig()
-    {
-        return [
-            ADMINLTETEMPLATE_PATH.'/config/database.php'    => config_path('database.php'),
         ];
     }
 }

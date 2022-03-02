@@ -1,13 +1,17 @@
-<?php namespace Creativeorange\Gravatar;
+<?php
+
+namespace Creativeorange\Gravatar;
 
 use Creativeorange\Gravatar\Exceptions\InvalidEmailException;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Class Gravatar
  * @package Creativeorange\Gravatar
  */
-class Gravatar {
-
+class Gravatar
+{
 	/**
 	 * Gravatar base url
 	 *
@@ -35,9 +39,9 @@ class Gravatar {
 	private $config;
 
 	/**
-	 * @var string
+	 * @var string|false
 	 */
-	private $fallback;
+	private $fallback = false;
 
 	/**
 	 * Override the default image fallback set in the config.
@@ -47,18 +51,21 @@ class Gravatar {
 	 * @param string $fallback
 	 * @return $this
 	 */
-	public function fallback ($fallback)
+	public function fallback($fallback)
 	{
-
+		// Gravatar changed mm to mp. 
+		// This way we make sure everything keeps working
+		if ($fallback === 'mm')
+			$fallback = 'mp';
+		
 		if (
 			filter_var($fallback, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)
-			||
-			in_array( $fallback, array('mm', 'identicon', 'monsterid', 'wavatar', 'retro', 'blank') )
-		)
+			|| in_array($fallback, array('mp', 'identicon', 'monsterid', 'wavatar', 'retro', 'robohash', 'blank'))
+		) {
 			$this->fallback = $fallback;
-
-		else
+		} else {
 			$this->fallback = false;
+		}
 
 		return $this;
 	}
@@ -66,11 +73,11 @@ class Gravatar {
 	/**
 	 * Check if Gravatar has an avatar for the given email address
 	 *
-	 * @param $email
+	 * @param string $email
 	 * @return bool
 	 * @throws InvalidEmailException
 	 */
-	public function exists ($email)
+	public function exists($email)
 	{
 		$this->checkEmail($email);
 		$this->email = $email;
@@ -79,13 +86,13 @@ class Gravatar {
 
 		$headers = @get_headers($this->buildUrl());
 
-		return (boolean) strpos($headers[0], '200');
+		return (bool) strpos($headers[0], '200');
 	}
 
 	/**
 	 * Get the gravatar url
 	 *
-	 * @param $email
+	 * @param string $email
 	 * @param string $configGroup
 	 * @return string
 	 * @throws InvalidEmailException
@@ -109,14 +116,18 @@ class Gravatar {
 	 * @param string|array|null $group
 	 * @return $this
 	 */
-	private function setConfig ($group = null)
+	private function setConfig($group = null)
 	{
-		if (is_string($group) && $group != 'default')
-			$this->config = array_dot( array_replace_recursive( config('gravatar.default'), config('gravatar.'.$group) ) );
-		elseif (is_array($group))
-			$this->config = array_dot( array_replace_recursive( config('gravatar.default'), $group) );
-		else
-			$this->config = array_dot( config('gravatar.default') );
+		if (
+			is_string($group)
+			&& $group != 'default'
+		) {
+			$this->config = Arr::dot(array_replace_recursive(config('gravatar.default'), config('gravatar.' . $group)));
+		} elseif (is_array($group)) {
+			$this->config = Arr::dot(array_replace_recursive(config('gravatar.default'), $group));
+		} else {
+			$this->config = Arr::dot(config('gravatar.default'));
+		}
 
 		return $this;
 	}
@@ -124,11 +135,11 @@ class Gravatar {
 	/**
 	 * Helper function to retrieve config settings.
 	 *
-	 * @param $value
-	 * @param null $default
-	 * @return null
+	 * @param string $value
+	 * @param mixed $default
+	 * @return mixed
 	 */
-	protected function c ($value, $default = null)
+	protected function c($value, $default = null)
 	{
 		return array_key_exists($value, $this->config) ? $this->config[$value] : $default;
 	}
@@ -140,13 +151,13 @@ class Gravatar {
 	 */
 	private function hashEmail()
 	{
-		return md5( strtolower( trim( $this->email ) ) );
+		return md5(strtolower(trim($this->email)));
 	}
 
 	/**
 	 * @return string
 	 */
-	private function getExtension ()
+	private function getExtension()
 	{
 		$v = $this->c('forceExtension');
 
@@ -169,55 +180,63 @@ class Gravatar {
 	/**
 	 * @return string
 	 */
-	private function getUrlParameters ()
+	private function getUrlParameters()
 	{
-		$build = array ();
+		$build = array();
 
-		foreach ( get_class_methods($this) as $method)
-		{
-			if ( substr($method, -strlen('Parameter')) !== 'Parameter')
+		foreach (get_class_methods($this) as $method) {
+			if (substr($method, -strlen('Parameter')) !== 'Parameter') {
 				continue;
+			}
 
-			if ($called = call_user_func(array($this, $method)))
+			if ($called = call_user_func(array($this, $method))) {
 				$build = array_replace($build, $called);
+			}
 		}
 
-		return '?'.http_build_query($build);
+		return '?' . http_build_query($build);
 	}
 
 	/**
 	 * @return array|null
 	 */
-	private function sizeParameter ()
+	private function sizeParameter()
 	{
-		if ( ! $this->c('size') || ! is_integer($this->c('size')) )
+		if (
+			!$this->c('size')
+			|| !is_integer($this->c('size'))
+		) {
 			return null;
+		}
 
 		return array('s' => $this->c('size'));
 	}
 
 	/**
-	 * @return array|null
+	 * @return array
 	 */
-	private function defaultParameter ()
+	private function defaultParameter()
 	{
-		$this->fallback = $this->c( 'fallback' );
+		if ($this->fallback === false) {
+			$this->fallback = $this->c('fallback') ? $this->c('fallback') : null;
+		}
 
-		if ( ! $this->fallback )
-			return null;
-
-		return array( 'd' => $this->fallback );
+		return array('d' => $this->fallback);
 	}
 
 	/**
 	 * @return array|null
 	 */
-	private function ratingParameter ()
+	private function ratingParameter()
 	{
 		$rating = $this->c('maximumRating');
 
-		if ( ! $rating || ! in_array($rating, array('g','pg','r','x') ) )
+		if (
+			!$rating
+			|| !in_array($rating, array('g', 'pg', 'r', 'x'))
+		) {
 			return null;
+		}
 
 		return array('r' => $rating);
 	}
@@ -225,10 +244,11 @@ class Gravatar {
 	/**
 	 * @return array|null
 	 */
-	private function forceDefaultParameter ()
+	private function forceDefaultParameter()
 	{
-		if ($this->c('forceDefault') === true)
+		if ($this->c('forceDefault') === true) {
 			return array('forcedefault' => 'y');
+		}
 
 		return null;
 	}
@@ -236,12 +256,14 @@ class Gravatar {
 	/**
 	 * Check if the provided email address is valid
 	 *
-	 * @param $email
+	 * @param string $email
 	 * @throws InvalidEmailException
 	 */
 	private function checkEmail($email)
 	{
-		if ( ! filter_var($email, FILTER_VALIDATE_EMAIL))
-			throw new InvalidEmailException ('Please specify a valid email address');
+		$validator = Validator::make(['email' => $email], ['email' => 'required|email']);
+
+		if ($validator->fails())
+			throw new InvalidEmailException('Please specify a valid email address');
 	}
 }

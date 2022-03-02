@@ -85,8 +85,6 @@ class AdminLTETemplateServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->defineRoutes();
-
-        //Publish
         $this->publishHomeController();
         $this->changeRegisterController();
         $this->changeLoginController();
@@ -101,9 +99,6 @@ class AdminLTETemplateServiceProvider extends ServiceProvider
         $this->publishConfig();
         $this->publishWebRoutes();
         $this->publishApiRoutes();
-        $this->publishDusk();
-        $this->publishDatabaseConfig();
-
         $this->enableSpatieMenu();
     }
 
@@ -238,42 +233,9 @@ class AdminLTETemplateServiceProvider extends ServiceProvider
     }
 
     /**
-     * Publish dusk tests files.
-     */
-    private function publishDusk()
-    {
-        $this->publishDuskEnvironment();
-        $this->publishAppServiceProvider();
-    }
-
-    /**
-     * Publish dusk environment files.
-     */
-    private function publishDuskEnvironment()
-    {
-        $this->publishes(AdminLTE::duskEnvironment(), 'adminlte');
-    }
-
-    /**
-     * Publish app/Providers/AppServiceProvider.php file.
-     */
-    private function publishAppServiceProvider()
-    {
-        $this->publishes(AdminLTE::appServiceProviderClass(), 'adminlte');
-    }
-
-    /**
-     * Publish database config files.
-     */
-    private function publishDatabaseConfig()
-    {
-        $this->publishes(AdminLTE::databaseConfig(), 'adminlte');
-    }
-
-    /**
      * Enable (if active) spatie menu.
      */
-    private function enableSpatieMenu()
+    protected function enableSpatieMenu()
     {
         if ($this->app->getProvider('Spatie\Menu\Laravel\MenuServiceProvider')) {
             require config_path('menu.php');

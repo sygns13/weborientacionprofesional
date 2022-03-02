@@ -1,7 +1,7 @@
 <?php
 
-return array(
-	'default' => array(
+return [
+	'default' => [
 
 		// By default, images are presented at 80px by 80px if no size parameter is supplied.
 		// You may request a specific image size, which will be dynamically delivered from Gravatar
@@ -10,7 +10,7 @@ return array(
 
 		// the fallback image, can be a string or a url
 		// for more info, visit: http://en.gravatar.com/site/implement/images/#default-image
-		'fallback' => 'mm',
+		'fallback' => 'mp',
 
 		// would you like to return a https://... image
 		'secure' => false,
@@ -30,5 +30,5 @@ return array(
 
 		// If you require a file-type extension (some places do) then you may also add an (optional) .jpg extension to that URL
 		'forceExtension' => 'jpg',
-	)
-);
+	]
+];
